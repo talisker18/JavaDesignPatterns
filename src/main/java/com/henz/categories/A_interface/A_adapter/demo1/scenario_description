@@ -1,0 +1,56 @@
+One of the great real life example of Adapter design pattern is mobile charger. 
+Mobile battery needs 3 volts to charge but the normal socket produces either 120V (US) or 240V (India). 
+So the mobile charger works as an adapter between mobile charging socket and the wall socket. 
+We will try to implement multi-adapter using adapter design pattern in this tutorial. 
+
+So first of all we will have two classes - Volt (to measure volts) and Socket to deliver default 120Volt. 
+Till now we have 1 client, a tv, that needs 120 volt (see Tv120Volt.java)
+
+Now suppose we got new clients, a mobile chargers, which only need 3 or 12 volt.
+
+We could create new Socket classes, one returning 3volt and one 12volt. Better approach: create an adapter that adapts the
+behavior of the Socket class, wit the goal to satisfy the new clients.
+
+So first we create a new Interface called 'SocketAdapter'. There we define 3 methods which later will return 3 or 12 or 120 volt when implemented.
+
+Create Impl of SocketAdapter
+
+Then create the 2 new clients --> mobile charger
+We can tell the new clients to use the SocketAdapter interface. There they can choose how many volts they need. See Program: MobileChargerProgram
+
+Now suppose our 1st client, the TV, doesnt need 120Volt anymore, but 240 Volt.
+He is using the Socket class at the moment which delivers 120Volt by default. We cant just modify this to deliver 240 Volt because there could be other clients that still need 120Volt and we would also break 'SocketAdapterImpl'
+So an easy way is to tell the Tv client to use the Adapter instead of the Socket class. He can leave the Tv.java as it is an create a new Tv class, like Tv240Volt and he should use the adapter now.
+
+In the SocketAdapter we define a new method with 240Volt. We have to implement this new method in SocketAdapterImpl
+
+-----here we used class adapter, meaning that SocketAdapterImpl extends the Socket class
+
+-----another approach is object adapter: instead of extending Socket class, we could also make a composition:
+
+public class SocketObjectAdapterImpl implements SocketAdapter{
+
+	//Using Composition for adapter pattern
+	private Socket sock = new Socket();
+	
+	@Override
+	public Volt get120Volt() {
+		return sock.getVolt();
+	}
+
+	@Override
+	public Volt get12Volt() {
+		Volt v= sock.getVolt();
+		return convertVolt(v,10);
+	}
+
+	@Override
+	public Volt get3Volt() {
+		Volt v= sock.getVolt();
+		return convertVolt(v,40);
+	}
+	
+	private Volt convertVolt(Volt v, int i) {
+		return new Volt(v.getVolts()/i);
+	}
+}
