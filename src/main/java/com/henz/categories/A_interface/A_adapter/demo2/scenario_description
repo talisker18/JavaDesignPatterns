@@ -1,1 +1,23 @@
-demo baeldung
+----------------- demo baeldung
+
+An Adapter pattern acts as a connector between two incompatible interfaces that otherwise cannot be connected directly. 
+An Adapter wraps an existing class with a new interface so that it becomes compatible with the client’s interface.
+
+The main motive behind using this pattern is to convert an existing interface into another interface that the client 
+expects. It's usually implemented once the application is designed.
+
+Consider a scenario in which there is an app that's developed in the US which returns the top speed of 
+luxury cars in miles per hour (MPH). 
+
+So first we create a interface and implementation that deliver speed in mph
+
+--> see Movable interface and 1 implementation 'BugattiVeyron'
+
+
+Now we need to use the same app for our client in the UK that wants the same results but in kilometers per hour (km/h).
+We dont create a new method in Movable interface but we use an adapter. Inside the adapter we use a Movable object to first
+get the speed in mph. Then we use a converter method in the adapter to convert that speed into kmh
+
+--> see adapter package
+
+--> see 'App' how an instance of adapter is created
